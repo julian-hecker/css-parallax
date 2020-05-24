@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <title>CSS Parallax Demo</title>
+
+        <style>
+            /* Based on https://keithclark.co.uk/articles/pure-css-parallax-websites/ */
+
+            /* Reset */
+            *,
+            *::before,
+            *::after {
+                box-sizing: inherit;
+            }
+            html {
+                box-sizing: border-box;
+                scroll-behavior: smooth;
+                height: 100%;
+            }
+            body {
+                margin: 0;
+                height: 100%;
+                -webkit-overflow-scrolling: touch;
+            }
+            .title {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 36px;
+            }
+
+            /* Parallax */
+            .parallax {
+                perspective: 300px;
+                height: 100vh;
+                overflow: hidden auto;
+                perspective-origin: 0;
+            }
+            .parallax__group {
+                position: relative;
+                height: 100vh;
+                transform-style: preserve-3d;
+            }
+            .parallax__layer {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                transform-origin: 0;
+                z-index: -100;
+                --pers: 300;
+            }
+            .parallax__layer--front {
+                background-color: yellowgreen;
+                /* opacity: 0.6; */
+                --dist: 10;
+                transform: translateZ(10px)
+                    scale(
+                        calc(
+                            calc(var(--pers) - var(--dist)) /
+                                var(--pers)
+                        )
+                    );
+            }
+
+            .parallax__layer--base {
+                background-color: yellow;
+                /* opacity: 0.6; */
+                transform: translateZ(0);
+            }
+            .parallax__layer--back {
+                background-color: orange;
+                /* opacity: 0.6; */
+                --dist: -100;
+                transform: translateZ(-100px)
+                    scale(
+                        calc(
+                            calc(var(--pers) - var(--dist)) /
+                                var(--pers)
+                        )
+                    );
+            }
+            .parallax__layer--deep {
+                background-color: red;
+                /* opacity: 0.6; */
+                --dist: -150;
+                transform: translateZ(-150px)
+                    scale(
+                        calc(
+                            calc(var(--pers) - var(--dist)) /
+                                var(--pers)
+                        )
+                    );
+            }
+
+            .debug .parallax__group {
+                /* debug mode */
+                transform: translate3d(300px, 0, -150px)
+                    rotateY(15deg);
+            }
+            .parallax__group {
+                transition: all 500ms;
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            onclick="document.querySelector('.parallax')
+            .classList.toggle('debug');"
+            style="position: fixed; z-index: 10;"
+        >
+            debug
+        </button>
+        <div class="parallax">
+            <div class="parallax__group" style="z-index: 0;">
+                <div class="parallax__layer parallax__layer--base">
+                    <div class="title">base</div>
+                </div>
+            </div>
+            <div class="parallax__group" style="z-index: -1;">
+                <div class="parallax__layer parallax__layer--back">
+                    <div class="title">back</div>
+                </div>
+            </div>
+            <div class="parallax__group" style="z-index: 0;">
+                <div class="parallax__layer parallax__layer--base">
+                    <div class="title">base</div>
+                </div>
+            </div>
+            <div class="parallax__group" style="z-index: -2;">
+                <div class="parallax__layer parallax__layer--deep">
+                    <div class="title">deep</div>
+                </div>
+            </div>
+            <div class="parallax__group" style="z-index: 2;">
+                <div class="parallax__layer parallax__layer--front">
+                    <div class="title">front</div>
+                </div>
+            </div>
+        </div>
+        <!-- <script src="parallax.js"></script> -->
+    </body>
+</html>
