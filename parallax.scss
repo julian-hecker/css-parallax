@@ -1,0 +1,46 @@
+@function rescale($perspective, $distance) {
+    @return ($perspective - $distance) / $perspective;
+}
+
+$perspective: 1000px;
+
+$depths: (
+    'abyss': -3 * $perspective,
+    'deeper': -2 * $perspective,
+    'deep': -1 * $perspective,
+    'back': -1/3 * $perspective,
+    'mid': 0 * $perspective,
+    'fore': 1/3 * $perspective,
+    'front': 1/2 * $perspective,
+);
+
+.parallax {
+    perspective: $perspective;
+    height: 100vh;
+    overflow: hidden auto;
+    perspective-origin: 0;
+}
+.parallax__group {
+    position: relative;
+    min-height: 100vh;
+    transform-style: preserve-3d;
+}
+.parallax__layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform-origin: 0;
+}
+
+@each $key, $value in $depths {
+    .parallax__layer--#{$key} {
+        transform: translateZ($value)
+            scale(rescale($perspective, $value));
+    }
+}
+
+.parallax.debug .parallax__group {
+    transform: translate3d(300px, 0, -150px) rotateY(15deg);
+}
